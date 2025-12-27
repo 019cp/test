@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一元二次方程式 - 10題測驗</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .score-board {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            display: none; /* 一開始隱藏 */
+        }
+        .question-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .question-card:hover {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .options label {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid transparent;
+        }
+        .options label:hover {
+            background-color: #f8f9fa;
+        }
+        /* 結果樣式 */
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+        }
+        .wrong {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+        .explanation {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+            display: none;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📐 一元二次方程式練習 (10題)</h1>
+    <div id="scoreBoard" class="score-board"></div>
+    
+    <form id="quizForm">
+        <div id="quizContainer">
+            </div>
+        <button type="button" class="btn-submit" onclick="submitQuiz()">送出答案 & 計算分數</button>
+    </form>
+</div>
+
+<script>
+    // 題目資料庫
+    const questions = [
+        {
+            id: 1,
+            q: "解方程式：x² - 5x + 6 = 0",
+            options: ["x = 2, 3", "x = -2, -3", "x = 1, 6", "x = -1, -6"],
+            ans: 0 // 對應 options 的 index (0代表第一個選項)
+        },
+        {
+            id: 2,
+            q: "解方程式：x² - 49 = 0",
+            options: ["x = 7", "x = ±7", "x = 49", "x = ±49"],
+            ans: 1
+        },
+        {
+            id: 3,
+            q: "解方程式：x(x + 3) = 0",
+            options: ["x = 3", "x = 0, 3", "x = 0, -3", "x = -3"],
+            ans: 2
+        },
+        {
+            id: 4,
+            q: "解方程式：x² + 4x + 4 = 0",
+            options: ["x = 2 (重根)", "x = -2 (重根)", "x = ±2", "無實數解"],
+            ans: 1
+        },
+        {
+            id: 5,
+            q: "解方程式：2x² - 4x = 0",
+            options: ["x = 2", "x = 4", "x = 0, 4", "x = 0, 2"],
+            ans: 3
+        },
+        {
+            id: 6,
+            q: "若 (x-1)(x+5) = 0，則 x 的解為何？",
+            options: ["x = 1, -5", "x = -1, 5", "x = 1, 5", "x = -1, -5"],
+            ans: 0
+        },
+        {
+            id: 7,
+            q: "解方程式：x² + x - 12 = 0",
+            options: ["x = 3, 4", "x = -3, 4", "x = 3, -4", "x = -3, -4"],
+            ans: 2
+        },
+        {
+            id: 8,
+            q: "解方程式：3x² = 27",
+            options: ["x = 3", "x = 9", "x = ±3", "x = ±9"],
+            ans: 2
+        },
+        {
+            id: 9,
+            q: "解方程式：(x-2)² = 9",
+            options: ["x = 5", "x = -1", "x = 5, -1", "x = 11"],
+            ans: 2
+        },
+        {
+            id: 10,
+            q: "方程式 x² + x + 1 = 0 的根的情況為何？（判別式 b²-4ac）",
+            options: ["有兩相異實根", "有兩相等實根 (重根)", "無實數解", "無法判斷"],
+            ans: 2
+        }
+    ];
+
+    // 初始化網頁：產生題目
+    function initQuiz() {
+        const container = document.getElementById('quizContainer');
+        let html = '';
+        
+        questions.forEach((item, index) => {
+            let optionsHtml = '';
+            item.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <label id="label_${index}_${optIndex}">
+                        <input type="radio" name="q${index}" value="${optIndex}">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            html += `
+                <div class="question-card" id="card_${index}">
+                    <div class="question-title">第 ${index + 1} 題：${item.q}</div>
+                    <div class="options">
+                        ${optionsHtml}
+                    </div>
+                    <div class="explanation" id="explain_${index}">
+                        正確答案：${item.options[item.ans]}
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+
+    // 計算分數與顯示結果
+    function submitQuiz() {
+        let score = 0;
+        const total = questions.length * 10; // 總分100
+        
+        questions.forEach((item, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            const card = document.getElementById(`card_${index}`);
+            const explain = document.getElementById(`explain_${index}`);
+            
+            // 清除之前的樣式
+            card.querySelectorAll('label').forEach(l => {
+                l.classList.remove('correct', 'wrong');
+            });
+
+            if (selected) {
+                const val = parseInt(selected.value);
+                if (val === item.ans) {
+                    score += 10;
+                    document.getElementById(`label_${index}_${val}`).classList.add('correct');
+                } else {
+                    document.getElementById(`label_${index}_${val}`).classList.add('wrong');
+                    document.getElementById(`label_${index}_${item.ans}`).classList.add('correct'); // 標示正確答案
+                    explain.style.display = 'block';
+                }
+            } else {
+                // 未作答
+                explain.style.display = 'block';
+                explain.innerText += " (未作答)";
+            }
+        });
+
+        // 顯示總分
+        const scoreBoard = document.getElementById('scoreBoard');
+        scoreBoard.style.display = 'block';
+        scoreBoard.innerHTML = `您的得分：<strong>${score} / ${total}</strong>`;
+        
+        if(score === 100) {
+            scoreBoard.style.backgroundColor = "#d4edda";
+            scoreBoard.style.color = "#155724";
+            scoreBoard.innerHTML += "<br>🎉 太棒了！全對！";
+        } else {
+            scoreBoard.style.backgroundColor = "#fff3cd";
+            scoreBoard.style.color = "#856404";
+        }
+        
+        // 滾動到最上方看分數
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 啟動
+    initQuiz();
+</script>
+
+</body>
+</html>
