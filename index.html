@@ -24,13 +24,15 @@
             color: #333;
             margin-bottom: 30px;
         }
+        /* 分數看板樣式 */
         .score-board {
             text-align: center;
             font-size: 1.5em;
             margin-bottom: 20px;
-            padding: 15px;
+            padding: 20px;
             background-color: #e3f2fd;
             border-radius: 8px;
+            border: 2px solid #b6d4fe;
             display: none; /* 一開始隱藏 */
         }
         .question-card {
@@ -83,9 +85,28 @@
             font-size: 1.2em;
             cursor: pointer;
             transition: background 0.3s;
+            margin-top: 20px;
         }
         .btn-submit:hover {
             background-color: #0056b3;
+        }
+        /* Email 按鈕樣式 */
+        .btn-email {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 25px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.9em;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .btn-email:hover {
+            background-color: #218838;
+            transform: scale(1.05);
         }
         .explanation {
             margin-top: 10px;
@@ -101,6 +122,7 @@
 
 <div class="container">
     <h1>📐 一元二次方程式練習 (10題)</h1>
+    
     <div id="scoreBoard" class="score-board"></div>
     
     <form id="quizForm">
@@ -117,7 +139,7 @@
             id: 1,
             q: "解方程式：x² - 5x + 6 = 0",
             options: ["x = 2, 3", "x = -2, -3", "x = 1, 6", "x = -1, -6"],
-            ans: 0 // 對應 options 的 index (0代表第一個選項)
+            ans: 0 
         },
         {
             id: 2,
@@ -214,11 +236,10 @@
         
         questions.forEach((item, index) => {
             const selected = document.querySelector(`input[name="q${index}"]:checked`);
-            const card = document.getElementById(`card_${index}`);
             const explain = document.getElementById(`explain_${index}`);
             
             // 清除之前的樣式
-            card.querySelectorAll('label').forEach(l => {
+            document.querySelectorAll(`#card_${index} label`).forEach(l => {
                 l.classList.remove('correct', 'wrong');
             });
 
@@ -233,25 +254,44 @@
                     explain.style.display = 'block';
                 }
             } else {
-                // 未作答
+                // 未作答，僅標示正確答案
+                document.getElementById(`label_${index}_${item.ans}`).classList.add('correct');
                 explain.style.display = 'block';
                 explain.innerText += " (未作答)";
             }
         });
 
-        // 顯示總分
+        // 顯示總分與 Email 按鈕
         const scoreBoard = document.getElementById('scoreBoard');
         scoreBoard.style.display = 'block';
-        scoreBoard.innerHTML = `您的得分：<strong>${score} / ${total}</strong>`;
         
+        let feedback = "";
         if(score === 100) {
             scoreBoard.style.backgroundColor = "#d4edda";
-            scoreBoard.style.color = "#155724";
-            scoreBoard.innerHTML += "<br>🎉 太棒了！全對！";
+            scoreBoard.style.borderColor = "#c3e6cb";
+            feedback = "🎉 太棒了！全對！";
         } else {
             scoreBoard.style.backgroundColor = "#fff3cd";
-            scoreBoard.style.color = "#856404";
+            scoreBoard.style.borderColor = "#ffeeba";
+            feedback = "再接再厲！";
         }
+
+        // Email 設定
+        const teacherEmail = '019@tpjh.kh.edu.tw';
+        const subject = encodeURIComponent('數學測驗成績回報');
+        const body = encodeURIComponent(`老師您好，我已完成一元二次方程式測驗，我的分數是：${score} / ${total} 分。`);
+
+        scoreBoard.innerHTML = `
+            <div>您的得分：<strong>${score} / ${total}</strong></div>
+            <div style="font-size: 0.8em; margin-top:5px;">${feedback}</div>
+            
+            <a href="mailto:${teacherEmail}?subject=${subject}&body=${body}" class="btn-email">
+                📧 點此寄送成績給老師
+            </a>
+            <div style="margin-top:5px; font-size:12px; color:#666;">
+                (點擊後請按下傳送，若無反應請手動截圖)
+            </div>
+        `;
         
         // 滾動到最上方看分數
         window.scrollTo({ top: 0, behavior: 'smooth' });
