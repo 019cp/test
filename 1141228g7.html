@@ -167,37 +167,48 @@
     let calculatedScore = 0;
 
     function submitQuiz() {
-        let score = 0;
-        let totalQuestions = 10;
-        let pointsPerQuestion = 10;
-        let form = document.forms['quizForm'];
-        
-        // 檢查姓名
-        let name = document.getElementById('studentName').value;
-        if (!name) {
-            alert("請先輸入姓名！");
-            return;
-        }
-
-        // 計算分數
-        for (let key in answers) {
-            let userAnswer = form[key].value;
-            if (userAnswer === answers[key]) {
-                score += pointsPerQuestion;
+        try {
+            let score = 0;
+            let pointsPerQuestion = 10;
+            
+            // 檢查姓名
+            let nameField = document.getElementById('studentName');
+            let name = nameField ? nameField.value.trim() : "";
+            
+            if (!name) {
+                alert("請先輸入姓名！");
+                nameField.focus();
+                return;
             }
-        }
 
-        calculatedScore = score;
-        
-        // 顯示結果
-        document.getElementById('scoreDisplay').innerText = score + " 分";
-        document.getElementById('result-area').style.display = 'block';
-        
-        let feedback = score >= 60 ? "恭喜及格！記得將成績寄給老師。" : "再接再厲！請將成績寄給老師。";
-        document.getElementById('feedbackText').innerText = feedback;
-        
-        // 滾動到底部
-        document.getElementById('result-area').scrollIntoView({behavior: 'smooth'});
+            // 計算分數
+            for (let key in answers) {
+                // 使用 querySelector 確保能抓到被選中的項目
+                let selector = `input[name="${key}"]:checked`;
+                let selectedOption = document.querySelector(selector);
+                
+                // 如果有選答案且答案正確
+                if (selectedOption && selectedOption.value === answers[key]) {
+                    score += pointsPerQuestion;
+                }
+            }
+
+            calculatedScore = score;
+            
+            // 顯示結果
+            document.getElementById('scoreDisplay').innerText = score + " 分";
+            document.getElementById('result-area').style.display = 'block';
+            
+            let feedback = score >= 60 ? "恭喜及格！記得將成績寄給老師。" : "再接再厲！請將成績寄給老師。";
+            document.getElementById('feedbackText').innerText = feedback;
+            
+            // 滾動到底部
+            document.getElementById('result-area').scrollIntoView({behavior: 'smooth'});
+            
+        } catch (e) {
+            console.error("發生錯誤:", e);
+            alert("計算成績時發生錯誤，請重新整理頁面再試一次。");
+        }
     }
 
     function sendEmail() {
@@ -211,4 +222,12 @@
         let body = `老師您好，\n\n我是 ${cls} 班 ${no} 號 ${name}。\n我在「七年級數學科第三次定期評量」線上測驗中獲得了：\n\n【 ${calculatedScore} 分 】\n\n請老師查收，謝謝。`;
 
         // 建立 mailto 連結
-        let mailtoLink = `mailto:019@tpjh.kh
+        let mailtoLink = `mailto:019@tpjh.kh.edu.tw?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        // 開啟郵件軟體
+        window.location.href = mailtoLink;
+    }
+</script>
+
+</body>
+</html>
