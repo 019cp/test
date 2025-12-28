@@ -3,42 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>線上測驗</title>
+    <title>數學線上測驗</title>
     <style>
         body { font-family: "Microsoft JhengHei", Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
         .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; }
+        h1 { text-align: center; color: #333; margin-bottom: 30px; }
         .student-info { margin-bottom: 20px; padding: 15px; background-color: #e9ecef; border-radius: 5px; }
         .student-info label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .student-info input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        .student-info input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         .question { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #ccc; }
         .question h3 { margin-bottom: 10px; font-size: 1.1em; color: #2c3e50; }
-        .options label { display: block; margin-bottom: 8px; cursor: pointer; }
+        .options label { display: block; margin-bottom: 8px; cursor: pointer; padding: 5px; border-radius: 3px; }
+        .options label:hover { background-color: #f1f1f1; }
         .options input[type="radio"] { margin-right: 10px; }
-        .input-answer { margin-top: 10px; }
-        .btn-submit { display: block; width: 100%; padding: 15px; background-color: #28a745; color: white; border: none; font-size: 1.2em; border-radius: 5px; cursor: pointer; transition: background 0.3s; }
+        
+        /* 按鈕樣式優化 */
+        .btn-submit { 
+            display: block; 
+            width: 100%; 
+            padding: 15px; 
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            font-size: 1.2em; 
+            font-weight: bold;
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-top: 20px;
+        }
         .btn-submit:hover { background-color: #218838; }
-        #result-area { margin-top: 30px; display: none; text-align: center; }
-        .score-display { font-size: 2em; font-weight: bold; color: #d9534f; }
-        .btn-mail { background-color: #007bff; margin-top: 15px; }
+        .btn-submit:active { transform: scale(0.98); }
+
+        #result-area { margin-top: 30px; display: none; text-align: center; border-top: 2px solid #28a745; padding-top: 20px; }
+        .score-display { font-size: 2.5em; font-weight: bold; color: #d9534f; margin: 10px 0; }
+        .btn-mail { background-color: #007bff; }
         .btn-mail:hover { background-color: #0069d9; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <h1>數學線上測驗</h1>
     
     <div class="student-info">
         <label for="studentClass">班級：</label>
         <input type="text" id="studentClass" placeholder="例如：701">
         <label for="studentName">姓名：</label>
-        <input type="text" id="studentName" placeholder="請輸入您的姓名">
+        <input type="text" id="studentName" placeholder="請輸入您的姓名 (必填)">
         <label for="studentNo">座號：</label>
         <input type="text" id="studentNo" placeholder="請輸入座號">
     </div>
 
     <form id="quizForm">
-        <div class="question" id="q1">
+        <div class="question">
             <h3>1. 化簡 13 - 5x - 8 + 7x = ?</h3>
             <div class="options">
                 <label><input type="radio" name="q1" value="A"> 2x + 21</label>
@@ -48,7 +65,7 @@
             </div>
         </div>
 
-        <div class="question" id="q2">
+        <div class="question">
             <h3>2. 解方程式：6 = x + 35，則 x = ?</h3>
             <div class="options">
                 <label><input type="radio" name="q2" value="A"> 41</label>
@@ -58,7 +75,7 @@
             </div>
         </div>
 
-        <div class="question" id="q3">
+        <div class="question">
             <h3>3. 解方程式：8x + 4 = 3x + 29，則 x = ?</h3>
             <div class="options">
                 <label><input type="radio" name="q3" value="A"> 5</label>
@@ -68,7 +85,7 @@
             </div>
         </div>
 
-        <div class="question" id="q4">
+        <div class="question">
             <h3>4. 解方程式：4x = 9x + 100，則 x = ?</h3>
             <div class="options">
                 <label><input type="radio" name="q4" value="A"> 20</label>
@@ -78,7 +95,7 @@
             </div>
         </div>
 
-        <div class="question" id="q5">
+        <div class="question">
             <h3>5. 解方程式：2(x - 3) - 3(2x + 1) = 3</h3>
             <div class="options">
                 <label><input type="radio" name="q5" value="A"> x = -1</label>
@@ -88,8 +105,8 @@
             </div>
         </div>
 
-        <div class="question" id="q6">
-            <h3>6. 解方程式：5/8 x = -8 3/4 (負八又四分之三)，則 x = ?</h3>
+        <div class="question">
+            <h3>6. 解方程式：(5/8)x = -8又3/4，則 x = ?</h3>
             <div class="options">
                 <label><input type="radio" name="q6" value="A"> -12</label>
                 <label><input type="radio" name="q6" value="B"> -14</label>
@@ -98,7 +115,7 @@
             </div>
         </div>
 
-        <div class="question" id="q7">
+        <div class="question">
             <h3>7. 下列何者是方程式 6x = 3x 的解？</h3>
             <div class="options">
                 <label><input type="radio" name="q7" value="A"> x = 0</label>
@@ -108,7 +125,7 @@
             </div>
         </div>
 
-        <div class="question" id="q8">
+        <div class="question">
             <h3>8. 桃樂絲帶 x 元去買甜點，全買剉冰可買 30 碗，全買豆花可買 40 碗。已知豆花每碗比剉冰便宜 5 元，依題意可列出下列哪一個方程式？</h3>
             <div class="options">
                 <label><input type="radio" name="q8" value="A"> x/30 = x/40 + 5</label>
@@ -118,7 +135,7 @@
             </div>
         </div>
 
-        <div class="question" id="q9">
+        <div class="question">
             <h3>9. 土匪老師去便利商店買冰拿鐵。已知每杯 50 元，店員說：「如果再多買 3 杯就可以打 8 折，價錢只比現在多 40 元。」土匪老師最後接受建議多買了3杯。請問土匪老師最後「共買了」幾杯冰拿鐵？</h3>
             <div class="options">
                 <label><input type="radio" name="q9" value="A"> 8 杯</label>
@@ -128,7 +145,7 @@
             </div>
         </div>
 
-         <div class="question" id="q10">
+         <div class="question">
             <h3>10. 小紅帽說：「六年前媽媽的年齡是我的一半再多 24 歲，六年後媽媽的年齡剛好是我的 8 倍。」關於這段話，下列敘述何者正確？</h3>
             <div class="options">
                 <label><input type="radio" name="q10" value="A"> 條件過少，無法推算出年齡</label>
@@ -138,95 +155,113 @@
             </div>
         </div>
 
-        <button type="button" class="btn-submit" onclick="submitQuiz()">送出答案並計算成績</button>
+        <button type="button" id="calcScoreBtn" class="btn-submit">送出答案並計算成績</button>
     </form>
 
     <div id="result-area">
         <p>您的成績為：</p>
-        <div class="score-display" id="scoreDisplay">0 / 100</div>
+        <div class="score-display" id="scoreDisplay">-- / 100</div>
         <p id="feedbackText"></p>
-        <button type="button" class="btn-submit btn-mail" onclick="sendEmail()">將成績寄給老師 (019@tpjh.kh.edu.tw)</button>
+        <button type="button" id="sendMailBtn" class="btn-submit btn-mail">將成績寄給老師 (019@tpjh.kh.edu.tw)</button>
     </div>
 </div>
 
 <script>
-    // 正確答案設定
-    const answers = {
-        q1: 'B', // 2x+5
-        q2: 'C', // -29
-        q3: 'A', // 5
-        q4: 'B', // -20
-        q5: 'C', // -3
-        q6: 'B', // -14
-        q7: 'A', // 0
-        q8: 'A', // x/30 = x/40 + 5
-        q9: 'B', // 11
-        q10: 'B' // 負數不合理
-    };
+    // 確保網頁完全載入後才執行程式，避免找不到按鈕
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        // 設定正確答案
+        var answers = {
+            q1: 'B',
+            q2: 'C',
+            q3: 'A',
+            q4: 'B',
+            q5: 'C',
+            q6: 'B',
+            q7: 'A',
+            q8: 'A',
+            q9: 'B',
+            q10: 'B'
+        };
 
-    let calculatedScore = 0;
+        var finalScore = 0;
 
-    function submitQuiz() {
-        try {
-            let score = 0;
-            let pointsPerQuestion = 10;
-            
-            // 檢查姓名
-            let nameField = document.getElementById('studentName');
-            let name = nameField ? nameField.value.trim() : "";
-            
-            if (!name) {
-                alert("請先輸入姓名！");
-                nameField.focus();
+        // 綁定計算按鈕事件
+        var calcBtn = document.getElementById('calcScoreBtn');
+        if (calcBtn) {
+            calcBtn.addEventListener('click', function() {
+                calculateAndShow();
+            });
+        } else {
+            alert("錯誤：找不到送出按鈕，請檢查程式碼是否完整複製。");
+        }
+
+        // 綁定寄信按鈕事件
+        var mailBtn = document.getElementById('sendMailBtn');
+        if (mailBtn) {
+            mailBtn.addEventListener('click', function() {
+                sendMail();
+            });
+        }
+
+        // 計算分數的主程式
+        function calculateAndShow() {
+            var name = document.getElementById('studentName').value;
+            if (!name.trim()) {
+                alert("請務必輸入【姓名】才能送出喔！");
+                document.getElementById('studentName').focus();
                 return;
             }
 
-            // 計算分數
-            for (let key in answers) {
-                // 使用 querySelector 確保能抓到被選中的項目
-                let selector = `input[name="${key}"]:checked`;
-                let selectedOption = document.querySelector(selector);
+            var form = document.getElementById('quizForm');
+            var score = 0;
+            var total = 10;
+            var perScore = 10;
+
+            // 跑迴圈對答案
+            for (var key in answers) {
+                // 使用最穩定的方式取得使用者選擇的值
+                var userOption = form.elements[key].value;
                 
-                // 如果有選答案且答案正確
-                if (selectedOption && selectedOption.value === answers[key]) {
-                    score += pointsPerQuestion;
+                // 如果沒選，userOption 會是空字串 ""
+                if (userOption === answers[key]) {
+                    score += perScore;
                 }
             }
 
-            calculatedScore = score;
-            
-            // 顯示結果
+            finalScore = score;
+
+            // 更新畫面
             document.getElementById('scoreDisplay').innerText = score + " 分";
             document.getElementById('result-area').style.display = 'block';
             
-            let feedback = score >= 60 ? "恭喜及格！記得將成績寄給老師。" : "再接再厲！請將成績寄給老師。";
-            document.getElementById('feedbackText').innerText = feedback;
+            var feedback = "";
+            if (score >= 90) feedback = "太厲害了！";
+            else if (score >= 60) feedback = "恭喜及格！";
+            else feedback = "請再多練習喔！";
             
-            // 滾動到底部
+            document.getElementById('feedbackText').innerText = feedback + " 請點擊下方按鈕寄送成績。";
+
+            // 平滑滾動到結果區
             document.getElementById('result-area').scrollIntoView({behavior: 'smooth'});
-            
-        } catch (e) {
-            console.error("發生錯誤:", e);
-            alert("計算成績時發生錯誤，請重新整理頁面再試一次。");
         }
-    }
 
-    function sendEmail() {
-        let name = document.getElementById('studentName').value;
-        let cls = document.getElementById('studentClass').value;
-        let no = document.getElementById('studentNo').value;
-        
-        if (!name) { alert("請輸入姓名"); return; }
+        // 寄信的主程式
+        function sendMail() {
+            var name = document.getElementById('studentName').value;
+            var cls = document.getElementById('studentClass').value;
+            var no = document.getElementById('studentNo').value;
+            
+            var subject = "數學測驗成績回報 - " + cls + "班 " + name;
+            var body = "老師您好，%0D%0A%0D%0A" + // %0D%0A 是換行
+                       "我是 " + cls + " 班 " + no + " 號 " + name + "。%0D%0A" +
+                       "我在線上測驗中獲得了：【 " + finalScore + " 分 】%0D%0A%0D%0A" +
+                       "請老師查收，謝謝。";
 
-        let subject = `數學測驗成績回報 - ${cls}班 ${name}`;
-        let body = `老師您好，\n\n我是 ${cls} 班 ${no} 號 ${name}。\n我在「七年級數學科第三次定期評量」線上測驗中獲得了：\n\n【 ${calculatedScore} 分 】\n\n請老師查收，謝謝。`;
-
-        // 建立 mailto 連結
-        let mailtoLink = `mailto:019@tpjh.kh.edu.tw?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        
-        // 開啟郵件軟體
-        window.location.href = mailtoLink;
-    }
+            var mailto = "mailto:019@tpjh.kh.edu.tw?subject=" + subject + "&body=" + body;
+            window.location.href = mailto;
+        }
+    });
 </script>
 
 </body>
